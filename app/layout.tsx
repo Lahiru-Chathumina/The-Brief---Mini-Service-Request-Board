@@ -5,13 +5,15 @@ import { Navbar } from '@/components/navbar';
 
 const inter = Inter({ subsets: ['latin'] });
 
+const ogImageUrl = process.env.NEXT_PUBLIC_OG_IMAGE || 'https://bolt.new/static/og_default.png';
+
 export const metadata: Metadata = {
   title: 'TradeBoard - Find Local Tradespeople Fast',
   description: 'Post your home service needs and let qualified tradespeople in your area find you.',
   openGraph: {
     images: [
       {
-        url: 'https://bolt.new/static/og_default.png',
+        url: ogImageUrl,
       },
     ],
   },
@@ -19,7 +21,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     images: [
       {
-        url: 'https://bolt.new/static/og_default.png',
+        url: ogImageUrl,
       },
     ],
   },
