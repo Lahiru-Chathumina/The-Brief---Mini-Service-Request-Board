@@ -16,16 +16,29 @@ export default function RequestDetailPage() {
 
   useEffect(() => {
     const id = params.id as string;
-    const found = getRequestById(id);
-    setRequest(found ?? null);
-    setLoading(false);
+    const fetchRequest = async () => {
+      try {
+        const found = await getRequestById(id);
+        setRequest(found ?? null);
+      } catch (error) {
+        console.error("Error fetching request:", error);
+        setRequest(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchRequest();
   }, [params.id]);
 
-  function handleStatusUpdate(status: JobStatus) {
+  async function handleStatusUpdate(status: JobStatus) {
     if (!request) return;
-    const updated = updateRequestStatus(request.id, status);
-    if (updated) {
-      setRequest(updated);
+    try {
+      const updated = await updateRequestStatus(request.id, status);
+      if (updated) {
+        setRequest(updated);
+      }
+    } catch (error) {
+      console.error("Error updating status:", error);
     }
   }
 

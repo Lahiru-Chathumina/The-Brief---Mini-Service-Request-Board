@@ -17,9 +17,21 @@ function RequestsContent() {
   );
   const [statusFilter, setStatusFilter] = useState<JobStatus | "All">("All");
   const [showFilters, setShowFilters] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setRequests(getRequests());
+    const fetchAllRequests = async () => {
+      try {
+        const allRequests = await getRequests();
+        setRequests(allRequests);
+      } catch (error) {
+        console.error("Error fetching requests:", error);
+        setRequests([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAllRequests();
   }, []);
 
   const filtered = useMemo(() => {
@@ -130,7 +142,21 @@ function RequestsContent() {
         )}
       </div>
 
-      {filtered.length === 0 ? (
+      {loading ? (
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className="animate-pulse flex flex-col rounded-xl border bg-white p-6">
+              <div className="h-4 w-3/4 rounded bg-gray-200" />
+              <div className="mt-2 h-3 w-full rounded bg-gray-100" />
+              <div className="mt-4 flex gap-2">
+                <div className="h-6 w-20 rounded bg-gray-200" />
+                <div className="h-6 w-20 rounded bg-gray-200" />
+              </div>
+              <div className="mt-3 h-3 w-1/2 rounded bg-gray-100" />
+            </div>
+          ))}
+        </div>
+      ) : filtered.length === 0 ? (
         <div className="mt-16 flex flex-col items-center text-center">
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
             <Search className="h-7 w-7 text-gray-400" />

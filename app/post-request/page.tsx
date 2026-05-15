@@ -36,23 +36,34 @@ export default function PostRequestPage() {
     return errs;
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const errs = validate();
     setErrors(errs);
     if (Object.keys(errs).length > 0) return;
 
     setSubmitting(true);
-    addRequest({
-      title: title.trim(),
-      description: description.trim(),
-      category,
-      location: location.trim(),
-      contactName: contactName.trim(),
-      contactEmail: contactEmail.trim(),
-    });
+    try {
+      const result = await addRequest({
+        title: title.trim(),
+        description: description.trim(),
+        category,
+        location: location.trim(),
+        contactName: contactName.trim(),
+        contactEmail: contactEmail.trim(),
+      });
 
-    router.push("/requests");
+      if (result) {
+        router.push("/requests");
+      } else {
+        setErrors({ title: "Failed to submit request. Please try again." });
+        setSubmitting(false);
+      }
+    } catch (error) {
+      console.error("Error submitting request:", error);
+      setErrors({ title: "An error occurred. Please try again." });
+      setSubmitting(false);
+    }
   }
 
   return (
