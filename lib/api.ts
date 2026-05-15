@@ -4,7 +4,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
 export async function fetchRequests(): Promise<JobRequest[]> {
   try {
-    const response = await fetch(`${API_URL}/api/requests`, {
+    const response = await fetch(`${API_URL}/api/jobs`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -20,7 +20,7 @@ export async function fetchRequests(): Promise<JobRequest[]> {
 
 export async function fetchRequestById(id: string): Promise<JobRequest | null> {
   try {
-    const response = await fetch(`${API_URL}/api/requests/${id}`, {
+    const response = await fetch(`${API_URL}/api/jobs/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -38,7 +38,7 @@ export async function createRequest(
   request: Omit<JobRequest, "id" | "status" | "createdAt">
 ): Promise<JobRequest | null> {
   try {
-    const response = await fetch(`${API_URL}/api/requests`, {
+    const response = await fetch(`${API_URL}/api/jobs`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -58,7 +58,7 @@ export async function updateRequestStatus(
   status: JobStatus
 ): Promise<JobRequest | null> {
   try {
-    const response = await fetch(`${API_URL}/api/requests/${id}`, {
+    const response = await fetch(`${API_URL}/api/jobs/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
